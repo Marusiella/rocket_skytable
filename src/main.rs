@@ -57,6 +57,24 @@ fn test(input: String) -> Html<String> {
     con.set(&link, &input).unwrap();
     con.update(&link, input).unwrap();
     Html(format!(r#"<a href="http://localhost:8000/{}">http://localhost:8000/{}</a>"#,link,link))
+    // Html(format!(r#"<a href="http://localhost:8000/{}">http://localhost:8000/{}</a>
+    // <script type="text/javascript">
+    //   function isValidHttpUrl(string) {{
+    //     let url;
+    //
+    //     try {{
+    //       url = new URL(string);
+    //     }} catch (_) {{
+    //       return false;
+    //     }}
+    //
+    //     return true;
+    //   }}
+    //   if (isValidHttpUrl("http://www.google.com/")) {{
+    //       document.write("")
+    //   }}
+    // </script>
+    // "#,link,link))
 }
 #[get("/")]
 fn wew() -> Html<&'static str> {
@@ -79,7 +97,12 @@ fn wew() -> Html<&'static str> {
     </body>
 </html>"#)
 }
+#[get("/null")]
+fn null() -> Html<&'static str> {
+    Html("this page does not exist")
+}
+
 #[launch]
 fn rocket() -> Rocket<Build> {
-    rocket::build().mount("/", routes![index,get,test,wew])
+    rocket::build().mount("/", routes![index,get,test,wew,null])
 }
