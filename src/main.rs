@@ -6,6 +6,7 @@ use skytable::Connection;
 use skytable::ConnectionBuilder;
 use rand::Rng;
 use urlencoding::decode;
+use rocket::{Build, Rocket};
 
 
 const CHARSET: &[u8] = b"abcdefghijklmnopqrstuvwxyz\
@@ -33,7 +34,7 @@ fn get(x:&str) -> Html<String> {
     let mut con = Connection::new("127.0.0.1", 2003).unwrap();
     let key = match con.get(x) {
         Ok(t) => t,
-        Err(e) => format!("null"),
+        Err(_) => format!("null"),
     };
     // decode(&key).unwrap().to_string()
     Html(format!(r#"<script type="text/javascript">
@@ -42,7 +43,7 @@ fn get(x:&str) -> Html<String> {
 
 }
 #[post("/x", data="<input>")]
-fn test(input: String) -> String{
+fn test(input: String) -> Html<String> {
     let input: String = input[5..].parse().unwrap();
     use rand::prelude::*;
     let mut thread_rng = thread_rng();
@@ -53,9 +54,9 @@ fn test(input: String) -> String{
         })
         .collect();
     let mut con = Connection::new("127.0.0.1", 2003).unwrap();
-    con.set(&link, input).unwrap();
-    println!("{}",link);
-    link
+    con.set(&link, &input).unwrap();
+    con.update(&link, input).unwrap();
+    Html(format!(r#"<a href="http://localhost:8000/{}">http://localhost:8000/{}</a>"#,link,link))
 }
 #[get("/")]
 fn wew() -> Html<&'static str> {
@@ -73,6 +74,6 @@ fn wew() -> Html<&'static str> {
 </html>"#)
 }
 #[launch]
-fn rocket() -> _ {
+fn rocket() -> Rocket<Build> {
     rocket::build().mount("/", routes![index,get,test,wew])
 }
