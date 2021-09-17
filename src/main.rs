@@ -68,7 +68,7 @@ fn wew() -> Html<&'static str> {
     <body>
         <form method="post" action="/x">
             <input type="text" id="link" name="link">
-            <button type="submit>submit</button>
+            <button type="submit"> submit </button>
         </form>
     </body>
 </html>"#)
