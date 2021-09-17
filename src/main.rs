@@ -63,13 +63,19 @@ fn wew() -> Html<&'static str> {
     Html(r#"<html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>link cutter</title>
+        <title>link shortener</title>
     </head>
     <body>
-        <form method="post" action="/x">
+        <h1 align="center">link shortener</h1>
+        <form method="post" action="/x" id="form">
             <input type="text" id="link" name="link">
-            <button type="submit"> submit </button>
+            <button type="submit"> apply </button>
         </form>
+        <style type="text/css">
+            #form{
+                text-align: center;
+            }
+        </style>
     </body>
 </html>"#)
 }
