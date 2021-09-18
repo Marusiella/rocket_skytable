@@ -53,9 +53,15 @@ fn test(input: String) -> Html<String> {
             CHARSET[idx] as char
         })
         .collect();
-    let mut con = Connection::new("127.0.0.1", 2003).unwrap();
-    con.set(&link, &input).unwrap();
-    con.update(&link, input).unwrap();
+    let mut con = ConnectionBuilder::new()
+        .set_host("127.0.0.1".to_string())
+        .set_port(2003)
+        .set_entity("default:default".to_owned())
+        .get_connection()
+        .unwrap();
+    // con.set(&link, &input).unwrap();
+    // con.update(&link, input).unwrap();
+    con.uset([link.clone()], [input]).unwrap();
     Html(format!(r#"<a href="http://localhost:8000/{}">http://localhost:8000/{}</a>"#,link,link))
     // Html(format!(r#"<a href="http://localhost:8000/{}">http://localhost:8000/{}</a>
     // <script type="text/javascript">

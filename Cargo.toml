@@ -7,6 +7,6 @@ edition = "2018"
 
 [dependencies]
 rocket = "0.5.0-rc.1"
-skytable="*"
+skytable = { version="*", features=["const-gen"] }
 rand = "0.8.4"
 urlencoding = "2.1.0"
